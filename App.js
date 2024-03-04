@@ -1,40 +1,87 @@
-import { StyleSheet, View, Image, Text, ImageBackground } from 'react-native';
-import carImg from "./assets/car.gif"
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useRef, useState } from "react";
 
-export default function App() {
+function Counter() {
+  const [readCount, updateCount] = useState(0);
+  var time = useRef();
+
+  function increatCount() {
+    updateCount(readCount + 1);
+  }
+
+  function decreaseCount() {
+    if (readCount > 0) {
+      updateCount(readCount - 1);
+    }
+  }
+
+  function resetCount() {
+    updateCount(0);
+  }
+
+  function startCount() {
+    time.current = setInterval(()=>{
+      updateCount(prev => prev + 1);
+    }, 1000);
+  }
+
+  function stopCount() {
+    clearInterval(time.current)
+  }
 
   return (
-    <ImageBackground source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTe19tUflIOdwMPRMvUoNw-fPTLBOiQpdmYDg&usqp=CAU"}} style={styles.container}>
-      <Image style={styles.logo} source={{uri: "https://cdn.dribbble.com/users/189524/screenshots/2818547/silhouette-solo-dribbble-03_v4.gif"}} />
-      <Text style={styles.text}>Ahmed</Text>
-      <Text style={styles.contact}>03310334392</Text>
-      <Image style={styles.car} source={carImg} />
-    </ImageBackground>
+    <View style={styles.container}>
+      <Text style={styles.counter}>{readCount}</Text>
+      <View style={styles.row}>
+        <TouchableOpacity onPress={increatCount} style={styles.customButton}>
+          <Text style={styles.buttonText}>Plus</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={decreaseCount} style={styles.customButton}>
+          <Text style={styles.buttonText}>Minus</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={resetCount} style={styles.customButton}>
+        <Text style={styles.buttonText}>Reset</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={startCount} style={styles.customButton}>
+        <Text style={styles.buttonText}>Start Counter</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={stopCount} style={styles.customButton}>
+        <Text style={styles.buttonText}>Stop Count</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "orange",
-    height: "100%",
+    flex: 1,
+    backgroundColor: "wheat",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
-  text: {
-    fontSize: 100
+  counter: {
+    fontSize: 100,
   },
-  contact: {
-    fontSize: 50,
+  row: {
+    flexDirection: "row",
+    gap: 10,
   },
-  logo: {
-    width: 200,
-    height: 200,
-    borderRadius: 100
+  customButton: {
+    marginBottom: 10,
+    width: 150,
+    height: 50,
+    borderRadius: 5,
+    backgroundColor: "tomato",
+    borderWidth: 2,
+    borderColor: "brown",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  car: {
-    width: "100%",
-    height: 200,
-    position: "absolute",
-    bottom: 0
-  }
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "white",
+  },
 });
+export default Counter;
